@@ -55,10 +55,19 @@ Function Move-Mp3ToFolder
     (
         [String] [ValidateNotNullOrEmpty()] $Directory = $PSScriptRoot
     )
+
     Set-Location $Directory
+
+    $albumname = switch -Wildcard ((Get-ItemProperty 'HKCU:\Control Panel\Desktop' PreferredUILanguages).PreferredUILanguages[0])
+    {
+        "en*" {"Album"}
+        "zh*" {"專輯"}
+        "ja*" {"アルバム"}
+    }
+
     ForEach($mp3 in (Get-MP3MetaData -Directory $Directory)){
         $Source = $mp3.Fullname
-        $Album = $mp3.Album -replace '[\\/:*?"<>|]','_' #replace invalid windows filename charaters
+        $Album = $mp3.$albumname -replace '[\\/:*?"<>|]','_' #replace invalid windows filename charaters
                                                         #every single charaters inside the square brackets are replaced individually, instead of treated as a whole string
                                                         #backslash is n escape charater, need to double it in order to tread it as string
         If(-not (Get-ChildItem | ?{$_.name -eq $Album -and $_.PSisContainer}))
