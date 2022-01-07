@@ -1,4 +1,4 @@
-# Sort-MP3
+# SortMP3
 PowerShell script to move loose mp3 files to folders base on album names.
 
 ## Description:
@@ -6,8 +6,8 @@ This script includes two Functions, Get-MP3MetaData and Move-MP3ToFolder. [Thank
 
 The script does the following when triggered:
 1. gather meta data from mp3 files
-2. for each mp3 file, look at the album name, and see if a folder with the same Album name exists
-3. if such folder does not exist, create the folder, then move that mp3 to the folder
+2. for each mp3 file, look at the album name, and move to the folder with the same Album name
+3. if such folder does not exist, create the folder (invalid windows filename charaters will be replaced), then move that mp3 to the folder
  4. repeat until all mp3 files with the Album meta data are moved
   
 ## Direction:
