@@ -18,4 +18,4 @@ An mp3 file will not be processed if one of the following occurs:
 1. it is missing the Album meta data
 2. it is not in the same folder level as the script, i.e., already inside a child folder, no matter the folder match the album name or not
 
-This script currently only support system whit display language set to Traditional Chinese and Japanese.
+This script currently only support system whit display language set to Traditional Chinese and English.
