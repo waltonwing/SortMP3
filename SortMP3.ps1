@@ -62,7 +62,6 @@ Function Move-Mp3ToFolder
     {
         "en*" {"Album"}
         "zh*" {"專輯"}
-        "ja*" {"アルバム"}
     }
 
     ForEach($mp3 in (Get-MP3MetaData -Directory $Directory)){
