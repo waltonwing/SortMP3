@@ -1,6 +1,3 @@
-#Put this script under a folder with mp3 files.
-#Run the script to sort mp3 to different folders according to their album name.
-
 Function Get-MP3MetaData
 {
     [CmdletBinding()]
