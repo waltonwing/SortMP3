@@ -11,7 +11,8 @@ The script does the following when triggered:
 4. repeat until all mp3 files with the Album meta data are moved
   
 ## Direction:
-Copy the PS1 to a folder containing mp3 files and run. You might need to set PowerShell execution policy to unrestricted.
+Copy the PS1 to a folder containing mp3 files and run. You might need to set PowerShell execution policy to unrestricted;
+or load the Functions and pipeline a specified mp3 folder with Move-MP3ToFolder
 
 ## Restriction:
 An mp3 file will not be processed if one of the following occurs:
