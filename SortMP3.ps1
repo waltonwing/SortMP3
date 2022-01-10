@@ -1,4 +1,4 @@
-﻿#Put this script under a folder with mp3 files.
+#Put this script under a folder with mp3 files.
 #Run the script to sort mp3 to different folders according to their album name.
 
 Function Get-MP3MetaData
@@ -53,28 +53,35 @@ Function Move-Mp3ToFolder
     [CmdletBinding()]
     Param
     (
-        [String] [ValidateNotNullOrEmpty()] $Directory = $PSScriptRoot
+        [String] [Parameter(Mandatory=$true, ValueFromPipeline=$true)] $Directory
     )
 
     Set-Location $Directory
 
-    $albumname = switch -Wildcard ((Get-ItemProperty 'HKCU:\Control Panel\Desktop' PreferredUILanguages).PreferredUILanguages[0])
+    switch -Wildcard ((Get-ItemProperty 'HKCU:\Control Panel\Desktop' PreferredUILanguages).PreferredUILanguages[0])
     {
-        "en*" {"Album"}
-        "zh*" {"專輯"}
+        "en*" {$albumname = "Album"}
+        "zh*" {$albumname = "專輯"}
+        default {$albumname = $null}    #to make sure no lagecy value
     }
 
-    ForEach($mp3 in (Get-MP3MetaData -Directory $Directory)){
-        $Source = $mp3.Fullname
-        $Album = $mp3.$albumname -replace '[\\/:*?"<>|]','_' #replace invalid windows filename charaters
-                                                        #every single charaters inside the square brackets are replaced individually, instead of treated as a whole string
-                                                        #backslash is n escape charater, need to double it in order to tread it as string
-        If(-not (Get-ChildItem | ?{$_.name -eq $Album -and $_.PSisContainer}))
-        {
-            New-Item -Name $Album -ItemType Directory -Force | Out-Null
-        }
-        Move-Item -Path  $Source -Destination "$Directory\$album" -Force
+    if ($null -ne $albumname) {
+        ForEach($mp3 in (Get-MP3MetaData -Directory $Directory)){
+            $Source = $mp3.Fullname
+            $Album = $mp3.$albumname -replace '[\\/:*?"<>|]','_'    #replace invalid windows filename charaters
+                                                                    #every single charaters inside the square brackets are replaced individually, instead of treated as a whole string
+                                                                    #backslash is n escape charater, need to double it in order to tread it as string
+            If(-not (Get-ChildItem | ?{$_.name -eq $Album -and $_.PSisContainer}))
+            {
+                New-Item -Name $Album -ItemType Directory -Force | Out-Null
+            }
+            Move-Item -Path  $Source -Destination "$Directory\$album" -Force
+        }  
+        Read-Host "All action completed, press any key to exit"      
+    } else 
+    {
+        Read-Host "System language is not supported, press any key to exit"    
     }
 }
 
-Move-Mp3ToFolder
+Get-Location | Move-Mp3ToFolder
